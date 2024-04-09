@@ -35,7 +35,7 @@ app.get('/api/shorturl/:shortURL',async(request,response)=>{
   })
   const URLRepo=mongoose.model('URLRepo',urlSchema);
   const responsePayload=await URLRepo.findById(url);
-  response.json({ original_url : responsePayload.originalURL, short_url : responsePayload._id});
+  response.redirect(responsePayload.originalURL);
 })
 app.post('/api/shorturl',async(request,response)=>{
   // console.log(request);
