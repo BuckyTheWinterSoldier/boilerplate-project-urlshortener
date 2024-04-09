@@ -26,14 +26,14 @@ app.listen(port, function() {
   console.log(`Listening on port ${port}`);
 });
 app.use(bodyParser.urlencoded({ extended: false }))
-app.get('/api/shorturl/:shortURL',async(request,response)=>{
-  const {url}=request.params;
-  mongoose.connect('mongodb+srv://ashokravi:ashokravi@cluster0.xk9uy7l.mongodb.net/URL_Shortner?retryWrites=true&w=majority&appName=Cluster0')
+mongoose.connect('mongodb+srv://ashokravi:ashokravi@cluster0.xk9uy7l.mongodb.net/URL_Shortner?retryWrites=true&w=majority&appName=Cluster0')
   .then(console.log('connected!'));
   const urlSchema=mongoose.Schema({
     originalURL:{type:String,required:true}
   })
   const URLRepo=mongoose.model('URLRepo',urlSchema);
+app.get('/api/shorturl/:shortURL',async(request,response)=>{
+  const {url}=request.params;
   const responsePayload=await URLRepo.findById(url);
   response.redirect(responsePayload.originalURL);
 })
@@ -48,12 +48,6 @@ app.post('/api/shorturl',async(request,response)=>{
     }
   })
   console.log(url);
-  mongoose.connect('mongodb+srv://ashokravi:ashokravi@cluster0.xk9uy7l.mongodb.net/URL_Shortner?retryWrites=true&w=majority&appName=Cluster0')
-  .then(console.log('connected!'));
-  const urlSchema=mongoose.Schema({
-    originalURL:{type:String,required:true}
-  })
-  const URLRepo=mongoose.model('URLRepo',urlSchema);
   const resposnePayload = await URLRepo.create({originalURL:url.href});
   // console.log(resposnePayload);
   response.json({ original_url : resposnePayload.originalURL, short_url : resposnePayload._id});
