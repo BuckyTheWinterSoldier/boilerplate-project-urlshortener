@@ -33,8 +33,8 @@ mongoose.connect('mongodb+srv://ashokravi:ashokravi@cluster0.xk9uy7l.mongodb.net
   })
   const URLRepo=mongoose.model('URLRepo',urlSchema);
 app.get('/api/shorturl/:shortURL',async(request,response)=>{
-  const {url}=request.params;
-  const responsePayload=await URLRepo.findById(url);
+  const {shortURL}=request.params;
+  const responsePayload=await URLRepo.findById(shortURL);
   response.redirect(responsePayload.originalURL);
 })
 app.post('/api/shorturl',async(request,response)=>{
@@ -43,7 +43,7 @@ app.post('/api/shorturl',async(request,response)=>{
   const url = URL.parse(request.body.url, true);
   const hostName=url.hostname;
   dns.lookup(hostName,(error,address,family)=>{
-    if(error){
+    if(!address){
     response.json({ error: 'invalid url' });
     }
   })
